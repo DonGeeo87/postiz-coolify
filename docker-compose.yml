@@ -3,14 +3,14 @@ services:
     image: ghcr.io/gitroomhq/postiz-app:latest
     environment:
       - SERVICE_FQDN_postiz_5000
-      - MAIN_URL=${SERVICE_FQDN_postiz}
-      - FRONTEND_URL=${SERVICE_FQDN_postiz}
-      - NEXT_PUBLIC_BACKEND_URL=${SERVICE_FQDN_postiz}/api
+      - MAIN_URL=https://${SERVICE_FQDN_POSTIZ}
+      - FRONTEND_URL=https://${SERVICE_FQDN_POSTIZ}
+      - NEXT_PUBLIC_BACKEND_URL=https://${SERVICE_FQDN_POSTIZ}/api
       - JWT_SECRET=${SERVICE_PASSWORD_JWTSECRET}
       - DATABASE_URL=postgresql://postgres:${SERVICE_PASSWORD_postgres}@postgres:5432/${POSTGRESQL_DATABASE:-postiz-db}
       - REDIS_URL=redis://default:${SERVICE_PASSWORD_redis}@redis:6379
       - BACKEND_INTERNAL_URL=http://localhost:3000
-      
+
       # Cloudflare R2 Settings
       - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
       - CLOUDFLARE_ACCESS_KEY=${CLOUDFLARE_ACCESS_KEY}
@@ -18,19 +18,19 @@ services:
       - CLOUDFLARE_BUCKETNAME=${CLOUDFLARE_BUCKETNAME}
       - CLOUDFLARE_BUCKET_URL=${CLOUDFLARE_BUCKET_URL}
       - CLOUDFLARE_REGION=${CLOUDFLARE_REGION}
-      
+
       # Storage Settings
       - STORAGE_PROVIDER=${STORAGE_PROVIDER:-local}
       - UPLOAD_DIRECTORY=${UPLOAD_DIRECTORY:-/uploads}
       - NEXT_PUBLIC_UPLOAD_DIRECTORY=${NEXT_PUBLIC_UPLOAD_DIRECTORY:-/uploads}
       - NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY=${NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY}
-      
+
       # Email Settings
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS}
       - EMAIL_FROM_NAME=${EMAIL_FROM_NAME}
       - EMAIL_PROVIDER=${EMAIL_PROVIDER}
-      
+
       # Social Media API Settings
       - X_API_KEY=${SERVICE_X_API}
       - X_API_SECRET=${SERVICE_X_SECRET}
@@ -60,18 +60,18 @@ services:
       - SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET}
       - MASTODON_CLIENT_ID=${SERVICE_MASTODON_ID}
       - MASTODON_CLIENT_SECRET=${SERVICE_MASTODON_SECRET}
-      
+
       # Integration APIs
       - BEEHIIVE_API_KEY=${SERVICE_BEEHIIVE_KEY}
       - BEEHIIVE_PUBLICATION_ID=${SERVICE_BEEHIIVE_PUBID}
       - OPENAI_API_KEY=${SERVICE_OPENAI_KEY}
-      
+
       # Misc Settings
       - NEXT_PUBLIC_DISCORD_SUPPORT=${NEXT_PUBLIC_DISCORD_SUPPORT}
       - NEXT_PUBLIC_POLOTNO=${NEXT_PUBLIC_POLOTNO}
       - IS_GENERAL=true
       - NX_ADD_PLUGINS=${NX_ADD_PLUGINS:-false}
-      
+
       # Payment Settings
       - FEE_AMOUNT=${FEE_AMOUNT:-0.05}
       - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
@@ -84,9 +84,9 @@ services:
       - postiz_uploads:/uploads/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.postiz-api.rule=Host(`${SERVICE_FQDN_postiz}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.postiz-api.rule=Host(`${SERVICE_FQDN_POSTIZ}`) && PathPrefix(`/api`)"
       - "traefik.http.routers.postiz-api.service=postiz-svc"
-      - "traefik.http.routers.postiz-app.rule=Host(`${SERVICE_FQDN_postiz}`)"
+      - "traefik.http.routers.postiz-app.rule=Host(`${SERVICE_FQDN_POSTIZ}`)"
       - "traefik.http.routers.postiz-app.service=postiz-svc"
       - "traefik.http.services.postiz-svc.loadbalancer.server.port=5000"
     depends_on:
@@ -133,4 +133,3 @@ services:
       interval: 5s
       timeout: 10s
       retries: 20
-
